@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# cc-transcribe 启动器：用本工具自建的轻量 venv 运行 cli.py。
+set -euo pipefail
+HERE="$(cd "$(dirname "$0")" && pwd)"
+PY="$HERE/.venv/bin/python"
+if [ ! -x "$PY" ]; then
+  echo "未找到 venv：$PY" >&2
+  echo "请先：cd \"$HERE\" && uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python -r requirements.txt" >&2
+  exit 1
+fi
+exec "$PY" "$HERE/cli.py" "$@"

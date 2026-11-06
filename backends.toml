@@ -1,0 +1,35 @@
+[default]
+asr = "qwen3-mlx"
+diarizer = "nemotron"   # 2026-10-22 起本地默认；满 8 人 / 指定 > 8 人 / 不可用时退回 sherpa
+runner = "win"          # 新增：win = Windows 3090 远程路线；asr / diarizer 保留，作为 --local 路线
+
+[runner.win]
+host = "win"
+jobs_dir_win = 'D:\asr-jobs'
+engines_dir_wsl = "/mnt/c/cc/cc-transcribe/remote/win"
+min_free_vram_mb = 12000
+second_opinion = true
+timeout_s_per_audio_hour = 3600
+
+[asr.qwen3-mlx]
+model = "moona3k/mlx-qwen3-asr-1.7b-8bit"      # 或本地目录路径（免网络）
+aligner = "Qwen/Qwen3-ForcedAligner-0.6B"
+language = "Chinese"
+
+[diarizer.nemotron]
+# Mac 本地 Nemotron-3-Diarization（Apple MPS），在独立 venv 里以子进程运行（主 .venv 不装 torch）
+python = "~/.venvs/cct-nemotron/bin/python"
+model_dir = "~/.cache/cc-transcribe/nemotron/nemotron-diar@f667ed7"
+device = "mps"
+timeout_s = 1800
+
+[diarizer.sherpa]
+segmentation_url = "https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-segmentation-models/sherpa-onnx-pyannote-segmentation-3-0.tar.bz2"
+embedding_url = "https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/3dspeaker_speech_eres2net_base_sv_zh-cn_3dspeaker_16k.onnx"
+threshold = 0.5
+min_duration_on = 0.3
+min_duration_off = 0.5
+
+# 备用后端（本期不实现，仅示例；实现后取消注释并在 backends/__init__.py 注册）
+# [asr.funasr]
+# core = "paraformer-zh"

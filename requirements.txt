@@ -1,0 +1,10 @@
+# cc-transcribe 核心依赖（无 torch）。安装：
+#   uv venv --python 3.12 .venv
+#   uv pip install --python .venv/bin/python -r requirements.txt
+# 系统依赖：ffmpeg / ffprobe（brew install ffmpeg）
+mlx-qwen3-asr==0.4.4
+sherpa-onnx==1.13.8
+numpy>=1.26
+soundfile>=0.12
+# 系统设 SOCKS 代理（ALL_PROXY=socks5://…）时 huggingface_hub 经 httpx 联网须 socksio；无代理时闲置
+httpx[socks]
